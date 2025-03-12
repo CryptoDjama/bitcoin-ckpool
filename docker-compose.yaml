@@ -59,7 +59,7 @@ services:
       # Publish ckpool port (if you want to accept external connections for miners):
       - "3334:3333"
       # API port (for ckstats):
-      - "4028:4028"
+      - "4029:4028"
       # Web port (for ckstats):
       - "4001:80"
 
