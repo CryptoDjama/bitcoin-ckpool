@@ -53,11 +53,11 @@ services:
 
     ports:
       # Publish Bitcoin ports:
-      - "8433:8433"  # p2p
+      - "8434:8433"  # p2p
       # Publish Bitcoin RPC port:
-      - "8432:8432"  # rpc
+      - "8433:8432"  # rpc
       # Publish ckpool port (if you want to accept external connections for miners):
-      - "3333:3333"
+      - "3334:3333"
       # API port (for ckstats):
       - "4028:4028"
       # Web port (for ckstats):
