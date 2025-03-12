@@ -109,11 +109,11 @@ services:
       SERVERURL: "0.0.0.0:3333"
       BTCADDRESS: "xxx"
       BTCSIG: "/mined by me/"
-      BLOCKPOLL: "50"
+      BLOCKPOLL: "10"
       DONATION: "0.0"
       NONCE1LENGTH: "4"
       NONCE2LENGTH: "8"
-      UPDATE_INTERVAL: "5"
+      UPDATE_INTERVAL: "60"
       VERSION_MASK: "1fffe000"
       MINDIFF: "512"
       STARTDIFF: "10000"
@@ -125,11 +125,11 @@ services:
 
     ports:
       # Publish Bitcoin ports:
-      - "8433:8433"  # p2p
+      - "8434:8433"  # p2p
       # Publish Bitcoin RPC port:
-      - "8432:8432"  # rpc
+      - "8433:8432"  # rpc
       # Publish ckpool port (if you want to accept external connections for miners):
-      - "3333:3333"
+      - "3334:3333"
       # API port (for ckstats):
       - "4028:4028"
       # Web port (for ckstats):
@@ -167,8 +167,8 @@ services:
       db-bitcoin:
         condition: service_healthy
     environment:
-      DATABASE_URL: "postgres://ckstats:ckstats:5433@db/ckstats"
-      SHADOW_DATABASE_URL: "postgres://ckstats:ckstats@db/dbshadow"
+      DATABASE_URL: "postgres://ckstats:ckstats@db-bitcoin/ckstats"
+      SHADOW_DATABASE_URL: "postgres://ckstats:ckstats@db-bitcoin/dbshadow"
       API_URL: "http://bitcoin-ckpool"
       RPCUSER: "rpcuser"
       RPCPASSWORD: "rpcpassword"
