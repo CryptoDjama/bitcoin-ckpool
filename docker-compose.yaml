@@ -37,11 +37,11 @@ services:
       SERVERURL: "0.0.0.0:3333"
       BTCADDRESS: "xxx"
       BTCSIG: "/mined by me/"
-      BLOCKPOLL: "50"
+      BLOCKPOLL: "10"
       DONATION: "0.0"
       NONCE1LENGTH: "4"
       NONCE2LENGTH: "8"
-      UPDATE_INTERVAL: "5"
+      UPDATE_INTERVAL: "60"
       VERSION_MASK: "1fffe000"
       MINDIFF: "512"
       STARTDIFF: "10000"
@@ -60,7 +60,7 @@ services:
       - "3333:3333"
       # API port (for ckstats):
       - "4028:4028"
-      # API port (for ckstats):
+      # Web port (for ckstats):
       - "4001:80"
 
   db-bitcoin:

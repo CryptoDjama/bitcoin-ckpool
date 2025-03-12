@@ -71,13 +71,20 @@ Here's the complete Docker Compose file for deployment:
 
 ```yaml
 services:
-  Bitcoin-ckpool:
+  bitcoin-ckpool:
     build:
       context: ckpool/
+      # For x86_64 builds:
       args:
         TARGETARCH: amd64
+      # Or for ARM64:
+      # args:
+      #   TARGETARCH: arm64
     container_name: bitcoin-ckpool
+
+    # Define environment variables to fill the config files at runtime:
     environment:
+      # Bitcoin config
       TESTNET: "0"
       ALGO: "sha256d"
       DAEMON: "1"
@@ -95,12 +102,13 @@ services:
       ZMQPUBHASHBLOCK: "tcp://127.0.0.1:28435"
       DATADIR: "/home/cna.bitcoin/mainnet"
 
+      # ckpool config
       BTCD_URL: "127.0.0.1:8432"
       BTCD_AUTH: "rpcuser"
       BTCD_PASS: "rpcpassword"
       SERVERURL: "0.0.0.0:3333"
-      BTCADDRESS: "dgb1qpju3lje2rjtv8h5cxje3xlv3r3004y3s60uvag"
-      BTCSIG: "/mined by Casraw/"
+      BTCADDRESS: "xxx"
+      BTCSIG: "/mined by me/"
       BLOCKPOLL: "50"
       DONATION: "0.0"
       NONCE1LENGTH: "4"
@@ -116,15 +124,20 @@ services:
       - ./ckpool/data:/home/cna.bitcoin/mainnet
 
     ports:
-      - "8433:8433"
-      - "8432:8432"
+      # Publish Bitcoin ports:
+      - "8433:8433"  # p2p
+      # Publish Bitcoin RPC port:
+      - "8432:8432"  # rpc
+      # Publish ckpool port (if you want to accept external connections for miners):
       - "3333:3333"
+      # API port (for ckstats):
       - "4028:4028"
+      # Web port (for ckstats):
       - "4001:80"
 
-  db:
+  db-bitcoin:
     image: postgres:13
-    container_name: db
+    container_name: db-bitcoin
     environment:
       POSTGRES_USER: ckstats
       POSTGRES_PASSWORD: ckstats
@@ -133,31 +146,35 @@ services:
       - ./db/data:/var/lib/postgresql/data
       - ./db/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ckstats -t 20 && psql -U ckstats -d dbshadow -c 'SELECT 1' >/dev/null 2>&1"]
       interval: 20s
       timeout: 30s
       retries: 5
-
-  ckstats:
+  ckstats-bitcoin:
     build:
       context: ckstats/
       dockerfile: Dockerfile
+      # For x86_64 builds:
       args:
         TARGETARCH: amd64
-    container_name: ckstats
+      # Or for ARM64:
+      # args:
+      #   TARGETARCH: arm64
+    container_name: ckstats-bitcoin
     depends_on:
-      db:
+      db-bitcoin:
         condition: service_healthy
     environment:
-      DATABASE_URL: "postgres://ckstats:ckstats@db/ckstats"
+      DATABASE_URL: "postgres://ckstats:ckstats:5433@db/ckstats"
       SHADOW_DATABASE_URL: "postgres://ckstats:ckstats@db/dbshadow"
-      API_URL: "http://bitcoin-ckpool:4028"
+      API_URL: "http://bitcoin-ckpool"
       RPCUSER: "rpcuser"
       RPCPASSWORD: "rpcpassword"
       RPCPORT: "8432"
     ports:
+    # Publish ckstats port:
       - "4000:3000"
 ```
 
