@@ -29,7 +29,7 @@ This repository provides a convenient Docker setup combining Bitcoin Core, ckpoo
 ## Prerequisites
 
 - Docker & Docker Compose installed.
-- At least 200GB available disk space (for blockchain data).
+- At least 1TB available disk space (for blockchain data).
 
 ## File Structure
 
