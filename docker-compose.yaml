@@ -95,8 +95,8 @@ services:
       db-bitcoin:
         condition: service_healthy
     environment:
-      DATABASE_URL: "postgres://ckstats:ckstats:5433@db/ckstats"
-      SHADOW_DATABASE_URL: "postgres://ckstats:ckstats:5433@db/dbshadow"
+      DATABASE_URL: "postgres://ckstats:ckstats@db-bitcoin:5433/ckstats"
+      SHADOW_DATABASE_URL: "postgres://ckstats:ckstats@db-bitcoin:5433/dbshadow"
       API_URL: "http://bitcoin-ckpool"
       RPCUSER: "rpcuser"
       RPCPASSWORD: "rpcpassword"
